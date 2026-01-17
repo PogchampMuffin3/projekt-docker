@@ -72,6 +72,20 @@ def add_todo():
     
     return jsonify({"id": new_id, "task": new_task, "completed": False}), 201
 
+@app.route('/todos/<int:todo_id>', methods=['DELETE'])
+def delete_todo(todo_id):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute('DELETE FROM todos WHERE id = %s RETURNING id;', (todo_id,))
+    deleted_id = cur.fetchone()
+    conn.commit()
+    cur.close()
+    conn.close()
+    
+    if deleted_id:
+        return jsonify({"message": "Usunięto", "id": todo_id}), 200
+    else:
+        return jsonify({"error": "Nie znaleziono zadania"}), 404
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
