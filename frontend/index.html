@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Projekt Konteneryzacja</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 50px; }
+        .box { border: 2px solid #333; padding: 20px; margin: 20px auto; width: 300px; background: #f4f4f4; }
+    </style>
+</head>
+<body>
+    <h1>Panel Sterowania Projektem</h1>
+    <div class="box">
+        <h3>Status Systemu</h3>
+        <p id="status">Łączenie z backendem...</p>
+    </div>
+    
+    <script>
+        fetch('http://localhost:5000/')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('status').innerText = data.message;
+                document.getElementById('status').style.color = "green";
+            })
+            .catch(error => {
+                document.getElementById('status').innerText = "Błąd połączenia z API";
+                document.getElementById('status').style.color = "red";
+            });
+    </script>
+</body>
+</html>
